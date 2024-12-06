@@ -2,12 +2,18 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-A comprehensive collection of examples demonstrating the capabilities of Amazon Bedrock Nova models, including image understanding, video understanding, and text generation.
+[English](README.md) | [中文](README_zh.md)
+
+A comprehensive collection of examples demonstrating the capabilities of Amazon Bedrock Nova models, including image understanding, image creation, video understanding, video creation, and text generation.
 
 ## Features
 
-- 🖼️ **Image Understanding**: Image analysis, Q&A, classification, and summarization
-- 🎥 **Video Understanding**: Video analysis, Q&A, and content summarization
+- 🖼️ **Image Processing**: 
+  - Image understanding: analysis, Q&A, classification, and summarization
+  - Image creation: generate images from text descriptions
+- 🎥 **Video Processing**:
+  - Video understanding: analysis, Q&A, and content summarization
+  - Video creation: generate videos from text or images
 - 📝 **Text Generation**: Both streaming and non-streaming text generation capabilities
 
 ## Prerequisites
@@ -40,17 +46,33 @@ aws configure
 ### Image Understanding
 ```python
 # Example of image analysis
-from multimodel.nova_image_understanding import analyze_image
+from images.nova_image_understanding import analyze_image
 
 response = analyze_image("path/to/image.jpg", "Describe this image.")
+```
+
+### Image Creation
+```python
+# Example of image generation
+from images.nova_image_creation import create_image
+
+response = create_image("A beautiful sunset over mountains")
 ```
 
 ### Video Understanding
 ```python
 # Example of video analysis
-from multimodel.nova_video_understanding import analyze_video
+from video.nova_video_understanding import analyze_video
 
 response = analyze_video("path/to/video.mp4", "Summarize this video.")
+```
+
+### Video Creation
+```python
+# Example of video creation from images
+from video.nova_video_creation_by_image import create_video_from_image
+
+response = create_video_from_image("path/to/image.jpg", "Create a video with this image")
 ```
 
 ### Text Generation
@@ -109,15 +131,18 @@ response = generate_text("Write a story about...")
 
 ```
 bedrock-nova/
-├── multimodel/
+├── images/
+│   ├── nova_image_creation.py
 │   ├── nova_image_understanding.py
-│   ├── nova_video_understanding.py
-│   └── media/
-│       ├── animals.mp4
-│       └── test1.png
+│   └── test1.png
 ├── text/
 │   ├── nova_text_generation.py
 │   └── nova_text_generation_streaming.py
+├── video/
+│   ├── nova_video_creation.py
+│   ├── nova_video_creation_by_image.py
+│   ├── nova_video_understanding.py
+│   └── animals.mp4
 ├── README.md
 └── README_zh.md
 ```

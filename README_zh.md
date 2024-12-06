@@ -2,12 +2,18 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-这是一个展示 Amazon Bedrock Nova 模型功能的综合示例集合，包括图像理解、视频理解和文本生成。
+[English](README.md) | [中文](README_zh.md)
+
+这是一个展示 Amazon Bedrock Nova 模型功能的综合示例集合，包括图像理解、图像创建、视频理解、视频创建和文本生成。
 
 ## 功能特点
 
-- 🖼️ **图像理解**：支持图像分析、问答、分类和摘要
-- 🎥 **视频理解**：支持视频分析、问答和内容摘要
+- 🖼️ **图像处理**：
+  - 图像理解：支持图像分析、问答、分类和摘要
+  - 图像创建：根据文本描述生成图像
+- 🎥 **视频处理**：
+  - 视频理解：支持视频分析、问答和内容摘要
+  - 视频创建：支持从文本或图像生成视频
 - 📝 **文本生成**：支持流式和非流式文本生成
 
 ## 前置条件
@@ -40,17 +46,33 @@ aws configure
 ### 图像理解
 ```python
 # 图像分析示例
-from multimodel.nova_image_understanding import analyze_image
+from images.nova_image_understanding import analyze_image
 
 response = analyze_image("path/to/image.jpg", "描述这张图片。")
+```
+
+### 图像创建
+```python
+# 图像生成示例
+from images.nova_image_creation import create_image
+
+response = create_image("一个美丽的山间日落")
 ```
 
 ### 视频理解
 ```python
 # 视频分析示例
-from multimodel.nova_video_understanding import analyze_video
+from video.nova_video_understanding import analyze_video
 
 response = analyze_video("path/to/video.mp4", "总结这个视频。")
+```
+
+### 视频创建
+```python
+# 基于图像的视频创建示例
+from video.nova_video_creation_by_image import create_video_from_image
+
+response = create_video_from_image("path/to/image.jpg", "使用这张图片创建视频")
 ```
 
 ### 文本生成
@@ -109,15 +131,18 @@ response = generate_text("写一个故事关于...")
 
 ```
 bedrock-nova/
-├── multimodel/
+├── images/
+│   ├── nova_image_creation.py
 │   ├── nova_image_understanding.py
-│   ├── nova_video_understanding.py
-│   └── media/
-│       ├── animals.mp4
-│       └── test1.png
+│   └── test1.png
 ├── text/
 │   ├── nova_text_generation.py
 │   └── nova_text_generation_streaming.py
+├── video/
+│   ├── nova_video_creation.py
+│   ├── nova_video_creation_by_image.py
+│   ├── nova_video_understanding.py
+│   └── animals.mp4
 ├── README.md
 └── README_zh.md
 ```
