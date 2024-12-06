@@ -1,0 +1,135 @@
+# Bedrock Nova 示例
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
+这是一个展示 Amazon Bedrock Nova 模型功能的综合示例集合，包括图像理解、视频理解和文本生成。
+
+## 功能特点
+
+- 🖼️ **图像理解**：支持图像分析、问答、分类和摘要
+- 🎥 **视频理解**：支持视频分析、问答和内容摘要
+- 📝 **文本生成**：支持流式和非流式文本生成
+
+## 前置条件
+
+- 具有 Bedrock 访问权限的 AWS 账户
+- Python 3.7+
+- Boto3
+- 已配置 AWS 凭证
+
+## 安装
+
+1. 克隆仓库：
+```bash
+git clone https://github.com/yourusername/bedrock-nova.git
+cd bedrock-nova
+```
+
+2. 安装依赖：
+```bash
+pip install boto3
+```
+
+3. 配置 AWS 凭证：
+```bash
+aws configure
+```
+
+## 使用方法
+
+### 图像理解
+```python
+# 图像分析示例
+from multimodel.nova_image_understanding import analyze_image
+
+response = analyze_image("path/to/image.jpg", "描述这张图片。")
+```
+
+### 视频理解
+```python
+# 视频分析示例
+from multimodel.nova_video_understanding import analyze_video
+
+response = analyze_video("path/to/video.mp4", "总结这个视频。")
+```
+
+### 文本生成
+```python
+# 流式文本生成示例
+from text.nova_text_generation_streaming import generate_text
+
+response = generate_text("写一个故事关于...")
+```
+
+## 技术规格
+
+### 图像理解
+- 总负载大小限制：25MB
+- 支持的宽高比：1:1 到 1:9、2:3、2:4 及其转置
+- 最小尺寸：至少一边 > 896px
+- 最大分辨率：8000x8000 像素
+
+#### 图像到令牌转换
+| 图像分辨率 | 预估令牌数 |
+|-----------|------------|
+| 900 x 450  | ~800      |
+| 900 x 900  | ~1300     |
+| 1400 x 900 | ~1800     |
+| 1800 x 900 | ~2400     |
+| 1300 x 1300| ~2600     |
+
+### 视频理解
+- 每次请求限一个视频
+- Base64 负载限制：25MB
+- S3 URI 视频大小限制：1GB
+- 支持的格式：MP4、MOV、MKV、WebM、FLV、MPEG、MPG、WMV、3GP
+
+#### 视频处理
+- 分辨率：所有视频转换为 672x672 方形
+- 帧采样：
+  - ≤16 分钟：1 FPS
+  - >16 分钟：降低采样率，固定 960 帧
+- 推荐时长：
+  - 低动态视频：<1 小时
+  - 高动态视频：<16 分钟
+
+#### 令牌使用
+| 视频时长 | 采样帧数 | 采样率 (FPS) | 令牌数 |
+|---------|---------|-------------|--------|
+| 10 秒    | 10      | 1           | 2,880  |
+| 30 秒    | 30      | 1           | 8,640  |
+| 16 分钟  | 960     | 1           | 276,480|
+| 20 分钟  | 960     | 0.755       | 276,480|
+| 30 分钟  | 960     | 0.5         | 276,480|
+| 45 分钟  | 960     | 0.35556     | 276,480|
+| 1 小时   | 960     | 0.14        | 276,480|
+| 1.5 小时 | 960     | 0.096       | 276,480|
+
+## 项目结构
+
+```
+bedrock-nova/
+├── multimodel/
+│   ├── nova_image_understanding.py
+│   ├── nova_video_understanding.py
+│   └── media/
+│       ├── animals.mp4
+│       └── test1.png
+├── text/
+│   ├── nova_text_generation.py
+│   └── nova_text_generation_streaming.py
+├── README.md
+└── README_zh.md
+```
+
+## 贡献指南
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
+3. 提交更改 (`git commit -m '添加某个很棒的特性'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 提交 Pull Request
+
+## 许可证
+
+本项目采用 Apache License 2.0 许可证 - 详见 [LICENSE](LICENSE) 文件。
