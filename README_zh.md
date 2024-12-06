@@ -44,43 +44,36 @@ aws configure
 ## 使用方法
 
 ### 图像理解
-```python
-# 图像分析示例
-from images.nova_image_understanding import analyze_image
-
-response = analyze_image("path/to/image.jpg", "描述这张图片。")
+```bash
+python3 images/nova_image_understanding.py
 ```
 
 ### 图像创建
-```python
-# 图像生成示例
-from images.nova_image_creation import create_image
-
-response = create_image("一个美丽的山间日落")
+```bash
+python3 images/nova_image_creation.py
 ```
 
 ### 视频理解
-```python
-# 视频分析示例
-from video.nova_video_understanding import analyze_video
-
-response = analyze_video("path/to/video.mp4", "总结这个视频。")
+```bash
+python3 video/nova_video_understanding.py
 ```
 
 ### 视频创建
-```python
-# 基于图像的视频创建示例
-from video.nova_video_creation_by_image import create_video_from_image
+```bash
+# 从图像创建视频
+python3 video/nova_video_creation_by_image.py
 
-response = create_video_from_image("path/to/image.jpg", "使用这张图片创建视频")
+# 从文本创建视频
+python3 video/nova_video_creation.py
 ```
 
 ### 文本生成
-```python
-# 流式文本生成示例
-from text.nova_text_generation_streaming import generate_text
+```bash
+# 非流式文本生成
+python3 text/nova_text_generation.py
 
-response = generate_text("写一个故事关于...")
+# 流式文本生成
+python3 text/nova_text_generation_streaming.py
 ```
 
 ## 技术规格

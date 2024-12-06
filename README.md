@@ -44,43 +44,36 @@ aws configure
 ## Usage
 
 ### Image Understanding
-```python
-# Example of image analysis
-from images.nova_image_understanding import analyze_image
-
-response = analyze_image("path/to/image.jpg", "Describe this image.")
+```bash
+python3 images/nova_image_understanding.py
 ```
 
 ### Image Creation
-```python
-# Example of image generation
-from images.nova_image_creation import create_image
-
-response = create_image("A beautiful sunset over mountains")
+```bash
+python3 images/nova_image_creation.py
 ```
 
 ### Video Understanding
-```python
-# Example of video analysis
-from video.nova_video_understanding import analyze_video
-
-response = analyze_video("path/to/video.mp4", "Summarize this video.")
+```bash
+python3 video/nova_video_understanding.py
 ```
 
 ### Video Creation
-```python
-# Example of video creation from images
-from video.nova_video_creation_by_image import create_video_from_image
+```bash
+# Create video from image
+python3 video/nova_video_creation_by_image.py
 
-response = create_video_from_image("path/to/image.jpg", "Create a video with this image")
+# Create video from text
+python3 video/nova_video_creation.py
 ```
 
 ### Text Generation
-```python
-# Example of streaming text generation
-from text.nova_text_generation_streaming import generate_text
+```bash
+# Non-streaming text generation
+python3 text/nova_text_generation.py
 
-response = generate_text("Write a story about...")
+# Streaming text generation
+python3 text/nova_text_generation_streaming.py
 ```
 
 ## Technical Specifications
