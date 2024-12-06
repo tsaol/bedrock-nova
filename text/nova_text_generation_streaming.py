@@ -1,39 +1,68 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
 import boto3
 import json
+from datetime import datetime
 
-client = boto3.client("bedrock-runtime")
+# Create a Bedrock Runtime client in the AWS Region of your choice.
+client = boto3.client("bedrock-runtime", region_name="us-east-1")
 
-system = [{ "text": "You are a helpful assistant" }]
+LITE_MODEL_ID = "us.amazon.nova-lite-v1:0"
 
-messages = [
-    {"role": "user", "content": [{"text": "Write a short story about lucky dogs"}]},
+# Define your system prompt(s).
+system_list = [
+            {
+                "text": "Act as a creative writing assistant. When the user provides you with a topic, write a short story about that topic."
+            }
 ]
 
-inf_params = {"maxTokens": 300, "topP": 0.1, "temperature": 0.3}
+# Define one or more messages using the "user" and "assistant" roles.
+message_list = [{"role": "user", "content": [{"text": "A camping trip"}]}]
 
-additionalModelRequestFields = {
-    "inferenceConfig": {
-         "topK": 20
-    }
+# Configure the inference parameters.
+inf_params = {"max_new_tokens": 500, "top_p": 0.9, "top_k": 20, "temperature": 0.7}
+
+request_body = {
+    "schemaVersion": "messages-v1",
+    "messages": message_list,
+    "system": system_list,
+    "inferenceConfig": inf_params,
 }
 
-# converse_stream API
-stream_response = client.converse_stream(
-    modelId="us.amazon.nova-lite-v1:0", 
-    messages=messages, 
-    system=system, 
-    inferenceConfig=inf_params,
-    additionalModelRequestFields=additionalModelRequestFields
+start_time = datetime.now()
+
+# Invoke the model with the response stream
+response = client.invoke_model_with_response_stream(
+    modelId=LITE_MODEL_ID, body=json.dumps(request_body)
 )
 
+request_id = response.get("ResponseMetadata").get("RequestId")
+print(f"Request ID: {request_id}")
+print("Awaiting first token...")
 
-print("\n[Streaming Response]")
-for event in stream_response:
-    if "chunk" in event:
-        chunk = json.loads(event["chunk"]["bytes"].decode())
-        if "output" in chunk and "message" in chunk["output"]:
-            content = chunk["output"]["message"]["content"]
-            if content and len(content) > 0 and "text" in content[0]:
-                print(content[0]["text"], end="", flush=True)
+chunk_count = 0
+time_to_first_token = None
 
-print("\nStreaming completed.")
+# Process the response stream
+stream = response.get("body")
+if stream:
+    for event in stream:
+        chunk = event.get("chunk")
+        if chunk:
+            # Print the response chunk
+            chunk_json = json.loads(chunk.get("bytes").decode())
+            # Pretty print JSON
+            # print(json.dumps(chunk_json, indent=2, ensure_ascii=False))
+            content_block_delta = chunk_json.get("contentBlockDelta")
+            if content_block_delta:
+                if time_to_first_token is None:
+                    time_to_first_token = datetime.now() - start_time
+                    print(f"Time to first token: {time_to_first_token}")
+
+                chunk_count += 1
+                current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S:%f")
+                # print(f"{current_time} - ", end="")
+                print(content_block_delta.get("delta").get("text"), end="")
+    print(f"Total chunks: {chunk_count}")
+else:
+    print("No response stream received.")
