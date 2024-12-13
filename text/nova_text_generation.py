@@ -16,6 +16,10 @@ additionalModelRequestFields = {
          "topK": 20
     }
 }
+# model id list
+# https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html
+# https://docs.aws.amazon.com/nova/latest/userguide/additional-resources.html
+# mode id :us.amazon.nova-pro-v1:0
 
 model_response = client.converse(
     modelId="us.amazon.nova-lite-v1:0", 

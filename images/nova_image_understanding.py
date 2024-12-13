@@ -3,11 +3,16 @@
 import base64
 import boto3
 import json
+
 # Create a Bedrock Runtime client in the AWS Region of your choice.
 client = boto3.client(
     "bedrock-runtime",
     region_name="us-east-1",
 )
+# model id list
+# https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html
+# https://docs.aws.amazon.com/nova/latest/userguide/additional-resources.html
+# mode id :us.amazon.nova-pro-v1:0
 
 MODEL_ID = "us.amazon.nova-lite-v1:0"
 # Open the image you'd like to use and encode it as a Base64 string.
