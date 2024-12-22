@@ -1,5 +1,4 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: Apache-2.0
+
 import boto3
 import json
 from datetime import datetime
@@ -11,9 +10,9 @@ LITE_MODEL_ID = "us.amazon.nova-lite-v1:0"
 
 # Define your system prompt(s).
 system_list = [
-            {
-                "text": "Act as a creative writing assistant. When the user provides you with a topic, write a short story about that topic."
-            }
+    {
+        "text": "Act as a creative writing assistant. When the user provides you with a topic, write a short story about that topic."
+    }
 ]
 
 # Define one or more messages using the "user" and "assistant" roles.
@@ -51,8 +50,6 @@ if stream:
         if chunk:
             # Print the response chunk
             chunk_json = json.loads(chunk.get("bytes").decode())
-            # Pretty print JSON
-            # print(json.dumps(chunk_json, indent=2, ensure_ascii=False))
             content_block_delta = chunk_json.get("contentBlockDelta")
             if content_block_delta:
                 if time_to_first_token is None:
