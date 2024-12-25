@@ -5,8 +5,14 @@ from datetime import datetime
 
 # Create a Bedrock Runtime client in the AWS Region of your choice.
 client = boto3.client("bedrock-runtime", region_name="us-east-1")
+# model id list
+# https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html
+# https://docs.aws.amazon.com/nova/latest/userguide/additional-resources.html
+# model id :us.amazon.nova-pro-v1:0
+# mdoel id:us.amazon.nova-lite-v1:0
 
-LITE_MODEL_ID = "us.amazon.nova-lite-v1:0"
+
+LITE_MODEL_ID = "us.amazon.nova-pro-v1:0"
 
 # Define your system prompt(s).
 system_list = [
